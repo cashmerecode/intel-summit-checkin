@@ -6,7 +6,7 @@
   <title>Intel – Team Sustainability Summit Check-In</title>
   <link rel="icon" href="img/intel-logo.png" />
   <meta name="theme-color" content="#2563eb" />
-  <meta name="description" content="Check-in system for Intel's Team Sustainability Summit: greeting, team tracking, progress bar, and persistence." />
+  <meta name="description" content="Check-in system for Intel's Team Sustainability Summit: greeting, team tracking, progress bar, celebration, persistence, and attendee list." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -65,17 +65,13 @@
             <span aria-hidden="true">✅</span> Check In
           </button>
         </div>
-        <div class="form__tools">
-          <button id="undoBtn" type="button" class="btn btn-secondary" disabled>Undo Last</button>
-          <button id="resetBtn" type="button" class="btn btn-danger">Reset All</button>
-        </div>
       </form>
     </section>
 
     <!-- Team Tracking -->
     <section class="panel" aria-labelledby="teamTitle">
       <h2 id="teamTitle" class="panel__title">Team Attendance</h2>
-      <div id="teamCards" class="teams"><!-- filled by JS --></div>
+      <div id="teamCards" class="teams"></div>
     </section>
 
     <!-- Attendee List -->
@@ -111,17 +107,16 @@
 
   <!-- App Script -->
   <script>
-    // ===== Intel Summit Check-In (meets rubric + level-ups) =====
-
+    // ===== Intel Summit Check-In (rubric-complete) =====
     const STORAGE_KEY = 'intel-summit-checkin-v1';
 
-    // Base state
     const initialState = {
       goal: 50,
       teams: ['WaterWise', 'Net Zero', 'Renewables'],
       teamCounts: { 'WaterWise': 0, 'Net Zero': 0, 'Renewables': 0 },
       attendees: [] // { name, team, ts }
     };
+
     const state = loadState() || structuredClone(initialState);
 
     // Elements
@@ -135,8 +130,6 @@
     const formEl        = document.getElementById('checkInForm');
     const nameEl        = document.getElementById('nameInput');
     const teamEl        = document.getElementById('teamSelect');
-    const undoBtn       = document.getElementById('undoBtn');
-    const resetBtn      = document.getElementById('resetBtn');
 
     const teamCardsEl   = document.getElementById('teamCards');
     const attendeeBody  = document.getElementById('attendeeBody');
@@ -150,7 +143,7 @@
     goalInputEl.value = state.goal;
     goalValueEl.textContent = state.goal;
     renderAll();
-    maybeCelebrate(); // if loaded state already met goal
+    maybeCelebrate();
 
     // Events
     formEl.addEventListener('submit', (e) => {
@@ -185,25 +178,6 @@
       maybeCelebrate();
     });
 
-    undoBtn.addEventListener('click', () => {
-      const last = state.attendees.pop();
-      if (!last) return;
-      state.teamCounts[last.team] = Math.max(0, (state.teamCounts[last.team] || 0) - 1);
-      saveState();
-      setGreeting(`Undid last check-in: ${sanitize(last.name)} (${last.team}).`);
-      renderAll();
-    });
-
-    resetBtn.addEventListener('click', () => {
-      if (!confirm('Reset all check-in data?')) return;
-      Object.keys(state.teamCounts).forEach(t => state.teamCounts[t] = 0);
-      state.attendees = [];
-      saveState();
-      hideCelebrate();
-      setGreeting('All data cleared. Ready for fresh check-ins!');
-      renderAll();
-    });
-
     closeCelebBtn.addEventListener('click', hideCelebrate);
 
     // Renderers
@@ -212,7 +186,6 @@
       renderTeams();
       renderList();
       renderProgress();
-      undoBtn.disabled = state.attendees.length === 0;
     }
 
     function renderTotals() {
@@ -228,8 +201,8 @@
         return `
           <article class="team${winClass}" aria-label="${t} team count">
             <div class="team__icon" aria-hidden="true">${icon}</div>
-            <h3>${t}</h3>
-            <span class="count">${count}</span>
+            <div class="team__name">${t}</div>
+            <div class="team__count">${count}</div>
           </article>
         `;
       }).join('');
@@ -271,18 +244,18 @@
           ? `${win.name} is in the lead with ${win.count} check-ins!`
           : 'Attendance goal reached!';
         celebrateEl.hidden = false;
-        celebrateEl.classList.add('active');
+        celebrateEl.classList.add('celebrate--show');
         confettiBurst();
       }
     }
 
     function hideCelebrate() {
-      celebrateEl.classList.remove('active');
+      celebrateEl.classList.remove('celebrate--show');
       celebrateEl.hidden = true;
       document.querySelectorAll('.confetti').forEach(n => n.remove());
     }
 
-    // tiny confetti
+    // Tiny confetti
     function confettiBurst() {
       const colors = ['#00bcd4','#0071c5','#8fe6ff','#28c76f','#ffd166'];
       for (let i = 0; i < 80; i++) {
