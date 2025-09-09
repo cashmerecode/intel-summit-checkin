@@ -5,285 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Intel – Team Sustainability Summit Check-In</title>
   <link rel="icon" href="img/intel-logo.png" />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#0071c5" />
   <meta name="description" content="Check-in system for Intel's Team Sustainability Summit: greeting, team tracking, progress bar, and persistence." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- Hero -->
   <header class="hero" role="banner">
-    <div class="hero__content">
-      <img src="img/intel-logo.png" alt="Intel" class="hero__logo" />
-      <h1 class="hero__title">Team Sustainability Summit</h1>
-      <p class="hero__subtitle">Check-in system for sustainability event attendees</p>
-    </div>
+    <img class="logo" src="img/intel-logo.png" alt="Intel" />
+    <h1>Team Sustainability Summit</h1>
+    <p>Check-in system for sustainability event attendees</p>
   </header>
 
-  <main id="app" class="container" aria-live="polite">
-    <!-- Totals + Progress -->
-    <section class="panel panel--compact">
-      <div class="totals">
-        <div class="totals__label">
-          <span aria-hidden="true">👥</span> Attendance:
-          <strong id="totalCount">0</strong> <span class="totals__of">/</span>
+  <main class="container" aria-live="polite">
+    <!-- Attendance + Goal + Progress -->
+    <section aria-labelledby="totalsTitle">
+      <h2 id="totalsTitle" class="sr-only">Attendance and Goal</h2>
+      <div class="attendance">
+        <div class="row">
+          <span aria-hidden="true">👥</span>
+          <span>Attendance:</span>
+          <strong id="totalCount">0</strong>
+          <span>/</span>
           <span id="goalValue">50</span>
         </div>
-        <div class="totals__goal">
-          Goal:
-          <input id="goalInput" type="number" min="1" value="50" aria-label="Attendance goal" />
+        <div class="goal-wrap">
+          <label for="goalInput">Goal:</label>
+          <input id="goalInput" class="goal-input" type="number" min="1" value="50" aria-label="Attendance goal" />
         </div>
-      </div>
-      <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress toward attendance goal">
-        <div id="progressBar" class="progress__bar" style="width:0%;">0%</div>
+        <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress toward attendance goal">
+          <div id="progressBar" class="progress-bar" style="width:0%"></div>
+        </div>
       </div>
     </section>
 
     <!-- Greeting -->
-    <section class="panel panel--message" aria-live="polite" aria-atomic="true">
+    <section aria-labelledby="greetTitle">
+      <h2 id="greetTitle" class="sr-only">Greeting</h2>
       <p id="greeting" class="greeting">Welcome! Check in to get started.</p>
     </section>
 
-    <!-- Check-In Form -->
-    <section class="panel" aria-labelledby="checkinTitle">
-      <h2 id="checkinTitle" class="panel__title">Attendee Check-In</h2>
-      <form id="checkInForm" class="form" autocomplete="off" novalidate>
-        <div class="form__row">
-          <label class="sr-only" for="nameInput">Enter name</label>
-          <input id="nameInput" class="input" type="text" placeholder="Enter name…" required />
+    <!-- Check-In -->
+    <section class="checkin-card" aria-labelledby="checkinTitle">
+      <h2 id="checkinTitle">Attendee Check-In</h2>
+      <form id="checkInForm" class="checkin-form" autocomplete="off" novalidate>
+        <label class="sr-only" for="nameInput">Enter name</label>
+        <input id="nameInput" type="text" placeholder="Enter name…" required />
 
-          <label class="sr-only" for="teamSelect">Select team</label>
-          <select id="teamSelect" class="select" required>
-            <option value="" disabled selected>Select Team…</option>
-            <option>WaterWise</option>
-            <option>Net Zero</option>
-            <option>Renewables</option>
-          </select>
+        <label class="sr-only" for="teamSelect">Select team</label>
+        <select id="teamSelect" required>
+          <option value="" disabled selected>Select Team…</option>
+          <option>WaterWise</option>
+          <option>Net Zero</option>
+          <option>Renewables</option>
+        </select>
 
-          <button type="submit" class="btn btn--primary">
-            <span aria-hidden="true">✅</span> Check In
-          </button>
-        </div>
-        <div class="form__tools">
-          <button id="undoBtn" type="button" class="btn btn--secondary" disabled>Undo Last</button>
-          <button id="resetBtn" type="button" class="btn btn--danger">Reset All</button>
+        <button type="submit" class="btn btn-primary">Check In</button>
+
+        <div class="actions" aria-label="Tools">
+          <button id="undoBtn" type="button" class="btn btn-ghost" disabled>Undo Last</button>
+          <button id="resetBtn" type="button" class="btn btn-ghost">Reset All</button>
         </div>
       </form>
     </section>
 
     <!-- Team Tracking -->
-    <section class="panel" aria-labelledby="teamTitle">
-      <h2 id="teamTitle" class="panel__title">Team Attendance</h2>
+    <section aria-labelledby="teamsTitle">
+      <h2 id="teamsTitle">Team Attendance</h2>
       <div id="teamCards" class="teams">
-        <!-- Cards rendered by JS -->
+        <!-- JS renders: .team > .count -->
       </div>
     </section>
 
     <!-- Attendee List -->
-    <section class="panel" aria-labelledby="listTitle">
-      <h2 id="listTitle" class="panel__title">Attendees</h2>
-      <div class="table-wrap">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Team</th>
-              <th scope="col">Time</th>
-            </tr>
-          </thead>
-          <tbody id="attendeeBody"></tbody>
-        </table>
-      </div>
+    <section class="attendee-list" aria-labelledby="listTitle">
+      <h2 id="listTitle">Attendees</h2>
+      <table aria-describedby="listTitle">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Team</th>
+            <th scope="col">Time</th>
+          </tr>
+        </thead>
+        <tbody id="attendeeBody"></tbody>
+      </table>
     </section>
   </main>
 
-  <!-- Celebration Overlay -->
-  <div id="celebrate" class="celebrate" role="dialog" aria-modal="true" aria-labelledby="celebrateTitle" hidden>
-    <div class="celebrate__card">
-      <h2 id="celebrateTitle">🎉 Goal Reached!</h2>
-      <p id="winnerMsg" class="celebrate__msg"></p>
-      <button id="closeCelebrate" class="btn btn--light">Continue</button>
+  <!-- Celebration -->
+  <div id="celebrate" class="celebration" role="dialog" aria-modal="true" aria-labelledby="celebrateTitle" hidden>
+    <div class="box">
+      <h2 id="celebrateTitle">Goal Reached!</h2>
+      <p id="winnerMsg"></p>
+      <button id="closeCelebrate" class="btn btn-ghost">Continue</button>
     </div>
   </div>
 
-  <footer class="footer">
+  <footer>
     <p>&copy; <span id="year"></span> Intel (student project).</p>
   </footer>
 
   <script>
-    // ----- State -----
-    const STORAGE_KEY = 'intel-summit-checkin-v1';
-    const initialState = {
-      goal: 50,
-      teams: ['WaterWise', 'Net Zero', 'Renewables'],
-      teamCounts: { 'WaterWise': 0, 'Net Zero': 0, 'Renewables': 0 },
-      attendees: [] // { name, team, ts }
-    };
-    const state = loadState() || initialState;
-
-    // ----- Elements -----
-    const totalCountEl  = document.getElementById('totalCount');
-    const goalValueEl   = document.getElementById('goalValue');
-    const goalInputEl   = document.getElementById('goalInput');
-    const progressBarEl = document.getElementById('progressBar');
-    const greetingEl    = document.getElementById('greeting');
-
-    const formEl        = document.getElementById('checkInForm');
-    const nameEl        = document.getElementById('nameInput');
-    const teamEl        = document.getElementById('teamSelect');
-    const undoBtn       = document.getElementById('undoBtn');
-    const resetBtn      = document.getElementById('resetBtn');
-
-    const teamCardsEl   = document.getElementById('teamCards');
-    const attendeeBody  = document.getElementById('attendeeBody');
-
-    const celebrateEl   = document.getElementById('celebrate');
-    const winnerMsgEl   = document.getElementById('winnerMsg');
-    const closeCelebBtn = document.getElementById('closeCelebrate');
-
-    // ----- Init -----
     document.getElementById('year').textContent = new Date().getFullYear();
-    goalInputEl.value = state.goal;
-    renderAll();
-
-    // ----- Event Listeners -----
-    formEl.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = (nameEl.value || '').trim();
-      const team = teamEl.value;
-
-      if (!name || !team) {
-        greetingEl.textContent = 'Please enter a name and select a team.';
-        return;
-      }
-
-      // Update state
-      const entry = { name, team, ts: Date.now() };
-      state.attendees.push(entry);
-      state.teamCounts[team] = (state.teamCounts[team] || 0) + 1;
-
-      // Greeting
-      greetingEl.textContent = `🎉 Welcome, ${name} from Team ${team}!`;
-
-      saveState();
-      renderAll();
-      checkCelebrate();
-
-      // Reset form
-      formEl.reset();
-      nameEl.focus();
-    });
-
-    goalInputEl.addEventListener('change', () => {
-      const v = parseInt(goalInputEl.value, 10);
-      state.goal = Number.isFinite(v) && v > 0 ? v : 1;
-      saveState();
-      renderProgress();
-      goalValueEl.textContent = state.goal;
-    });
-
-    undoBtn.addEventListener('click', () => {
-      const last = state.attendees.pop();
-      if (!last) return;
-      state.teamCounts[last.team] = Math.max(0, (state.teamCounts[last.team] || 0) - 1);
-      saveState();
-      renderAll();
-    });
-
-    resetBtn.addEventListener('click', () => {
-      if (!confirm('Reset all check-in data?')) return;
-      state.attendees = [];
-      Object.keys(state.teamCounts).forEach(t => state.teamCounts[t] = 0);
-      saveState();
-      hideCelebrate();
-      renderAll();
-    });
-
-    closeCelebBtn.addEventListener('click', hideCelebrate);
-
-    // ----- Renderers -----
-    function renderAll() {
-      renderTotals();
-      renderTeams();
-      renderList();
-      renderProgress();
-      undoBtn.disabled = state.attendees.length === 0;
-    }
-
-    function renderTotals() {
-      totalCountEl.textContent = state.attendees.length;
-    }
-
-    function renderTeams() {
-      const winning = winnerTeam();
-      teamCardsEl.innerHTML = state.teams.map(t => {
-        const count = state.teamCounts[t] || 0;
-        const winClass = winning && winning.name === t ? ' team--winner' : '';
-        const icon = t === 'WaterWise' ? '🚿' : (t === 'Net Zero' ? '🌿' : '⚡️');
-        return `
-          <article class="team${winClass}" aria-label="${t} team count">
-            <div class="team__icon" aria-hidden="true">${icon}</div>
-            <div class="team__name">${t}</div>
-            <div class="team__count">${count}</div>
-          </article>
-        `;
-      }).join('');
-    }
-
-    function renderList() {
-      attendeeBody.innerHTML = state.attendees.slice().reverse().map(a => {
-        const time = new Date(a.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        return `<tr>
-          <td>${escapeHtml(a.name)}</td>
-          <td>${a.team}</td>
-          <td>${time}</td>
-        </tr>`;
-      }).join('');
-    }
-
-    function renderProgress() {
-      const total = state.attendees.length;
-      const pct = Math.min(100, Math.round((total / Math.max(1, state.goal)) * 100));
-      progressBarEl.style.width = pct + '%';
-      progressBarEl.textContent = pct + '%';
-      progressBarEl.parentElement.setAttribute('aria-valuenow', String(pct));
-    }
-
-    // ----- Celebration -----
-    function winnerTeam() {
-      const scores = state.teams.map(name => ({ name, count: state.teamCounts[name] || 0 }))
-                                .sort((a,b) => b.count - a.count);
-      if (!scores.length || scores[0].count === 0) return null;
-      if (scores[1] && scores[1].count === scores[0].count) return null;
-      return scores[0];
-    }
-
-    function checkCelebrate() {
-      if (state.attendees.length >= state.goal) {
-        const win = winnerTeam();
-        winnerMsgEl.textContent = win
-          ? `${win.name} is in the lead with ${win.count} check-ins!`
-          : 'Attendance goal reached!';
-        celebrateEl.hidden = false;
-        celebrateEl.classList.add('celebrate--show');
-      }
-    }
-
-    function hideCelebrate() {
-      celebrateEl.classList.remove('celebrate--show');
-      celebrateEl.hidden = true;
-    }
-
-    // ----- Storage & utils -----
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-    function loadState() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); }
-      catch { return null; }
-    }
-    function escapeHtml(s) {
-      return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
   </script>
 </body>
 </html>
