@@ -1,5 +1,7 @@
+/* Theme */
 :root {
   --intel-blue: #0071c5;
+  --intel-blue-600: #0b64a7;
   --intel-teal: #00bcd4;
   --ink-900: #0d1b2a;
   --ink-800: #1b263b;
@@ -11,10 +13,16 @@
   --danger: #ff5252;
 }
 
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
@@ -26,7 +34,31 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* ---------------------- HERO ---------------------- */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+/* A11y */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Hero */
 .hero {
   background: linear-gradient(135deg, var(--intel-blue), var(--intel-teal));
   color: #fff;
@@ -34,12 +66,12 @@ body {
   padding: 3rem 1rem 2rem;
 }
 
-.hero .logo {
+.hero__logo {
   width: 84px;
-  margin-bottom: 0.75rem;
+  margin: 0 auto 0.75rem;
 }
 
-.hero h1 {
+.hero__title {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 0.35rem;
@@ -48,7 +80,7 @@ body {
   text-overflow: ellipsis;
 }
 
-.hero p {
+.hero__subtitle {
   font-size: 1rem;
   opacity: 0.95;
   white-space: nowrap;
@@ -56,36 +88,59 @@ body {
   text-overflow: ellipsis;
 }
 
-/* ---------------------- CONTAINER ---------------------- */
+/* Container */
 .container {
   max-width: 980px;
   margin: 1.5rem auto;
   padding: 0 1rem;
 }
 
-/* ---------------------- ATTENDANCE ---------------------- */
-.attendance {
-  display: grid;
+/* Panels */
+.panel {
+  background: var(--panel);
+  border: 1px solid rgba(0, 188, 212, 0.3);
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.panel--compact {
+  max-width: 860px;
+  margin: 0 auto 1.5rem;
+}
+
+.panel--message {
+  max-width: 860px;
+  margin: 0 auto 1.5rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+.panel__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Totals */
+.totals {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 0.6rem;
-  justify-items: center;
-  margin: 0 auto 1rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
 }
 
-.attendance .row {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  color: var(--accent);
+.totals__label {
   font-weight: 600;
+  color: var(--accent);
 }
 
-.goal-wrap {
-  display: flex;
-  gap: 0.4rem;
-  align-items: center;
-}
-
-.goal-input {
+.totals__goal input {
   width: 72px;
   padding: 0.35rem 0.5rem;
   border: 1px solid #2aa8d6;
@@ -94,63 +149,46 @@ body {
   color: #fff;
 }
 
-.progress-wrap {
+/* Progress */
+.progress {
   background: #233447;
   border-radius: 8px;
   height: 12px;
-  width: min(860px, 92%);
+  width: 100%;
   overflow: hidden;
 }
 
-.progress-bar {
+.progress__bar {
   background: var(--intel-teal);
   height: 100%;
   width: 0%;
   transition: width 0.35s ease;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
 }
 
-/* ---------------------- GREETING ---------------------- */
-.welcome,
+/* Greeting */
 .greeting {
-  max-width: 860px;
-  margin: 0.75rem auto 1.25rem;
   background: rgba(0, 188, 212, 0.1);
   border: 1px solid var(--intel-teal);
   border-radius: 10px;
   padding: 0.8rem 1rem;
-  text-align: center;
   font-weight: 600;
   color: #e9faff;
 }
 
-/* ---------------------- CHECK-IN ---------------------- */
-.checkin-card {
-  max-width: 860px;
-  margin: 0 auto 2rem;
-  background: var(--panel);
-  border: 1px solid rgba(0, 188, 212, 0.3);
-  border-radius: 12px;
-  padding: 1.25rem 1rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-}
-
-.checkin-card h2 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 0.9rem;
-  white-space: nowrap;
-}
-
-.checkin-form {
+/* Form */
+.form__row {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
   gap: 0.6rem;
   align-items: center;
 }
 
-.checkin-form input,
-.checkin-form select {
+.input,
+.select {
   padding: 0.62rem 0.75rem;
   border: 1px solid #2aa8d6;
   border-radius: 8px;
@@ -159,7 +197,7 @@ body {
   min-width: 0;
 }
 
-.checkin-form input::placeholder {
+.input::placeholder {
   color: var(--muted);
 }
 
@@ -180,35 +218,42 @@ body {
   outline-offset: 2px;
 }
 
-.btn-primary {
+.btn--primary {
   background: var(--intel-blue);
   color: #fff;
 }
 
-.btn-primary:hover {
+.btn--primary:hover {
   filter: brightness(0.95);
 }
 
-.btn-ghost {
-  background: transparent;
-  color: #eaf6ff;
-  border: 1px solid rgba(234, 246, 255, 0.25);
+.btn--secondary {
+  background: var(--intel-teal);
+  color: #fff;
 }
 
-.actions {
+.btn--danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn--light {
+  background: #f5faff;
+  color: var(--ink-900);
+}
+
+.form__tools {
   display: flex;
   gap: 0.5rem;
   justify-content: flex-end;
   margin-top: 0.5rem;
 }
 
-/* ---------------------- TEAM ATTENDANCE ---------------------- */
+/* Teams */
 .teams {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  max-width: 860px;
-  margin: 0 auto 2rem;
 }
 
 .team {
@@ -220,52 +265,57 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
-.team h3 {
-  font-size: 1rem;
+.team__icon {
+  font-size: 1.5rem;
   margin-bottom: 0.35rem;
-  white-space: nowrap;
 }
 
-.team .count {
+.team__name {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.team__count {
   font-size: 1.6rem;
   font-weight: 800;
   color: var(--accent);
 }
 
-/* ---------------------- ATTENDEE LIST ---------------------- */
-.attendee-list {
-  max-width: 860px;
-  margin: 0 auto 2rem;
-  background: var(--panel);
-  border: 1px solid rgba(0, 188, 212, 0.3);
-  border-radius: 12px;
-  overflow: hidden;
+.team--winner {
+  border-color: var(--success);
+  box-shadow: 0 0 12px var(--success);
 }
 
-.attendee-list table {
+/* Attendee list */
+.table-wrap {
+  overflow-x: auto;
+}
+
+.table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.attendee-list th,
-.attendee-list td {
+.table th,
+.table td {
   padding: 0.75rem 0.9rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   text-align: left;
 }
 
-.attendee-list th {
+.table th {
   background: var(--intel-blue);
   color: #fff;
   font-weight: 700;
 }
 
-.attendee-list tr:nth-child(even) {
+.table tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* ---------------------- CELEBRATION ---------------------- */
-.celebration {
+/* Celebration */
+.celebrate {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.88);
@@ -275,11 +325,11 @@ body {
   z-index: 1000;
 }
 
-.celebration.active {
+.celebrate--show {
   display: flex;
 }
 
-.celebration .box {
+.celebrate__card {
   background: #0f2540;
   border: 1px solid rgba(0, 188, 212, 0.35);
   border-radius: 14px;
@@ -289,36 +339,36 @@ body {
   max-width: 560px;
 }
 
-.celebration h2 {
+.celebrate__card h2 {
   font-size: 1.4rem;
   margin-bottom: 0.25rem;
   white-space: nowrap;
 }
 
-.celebration p {
+.celebrate__msg {
   color: #cfeaff;
 }
 
-/* ---------------------- FOOTER ---------------------- */
-footer {
+/* Footer */
+.footer {
   padding: 1.25rem 1rem;
   text-align: center;
   color: #dfe9f6;
   border-top: 1px solid rgba(0, 188, 212, 0.25);
 }
 
-/* ---------------------- MEDIA ---------------------- */
+/* Responsive */
 @media (max-width: 900px) {
-  .checkin-form {
+  .form__row {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
 
-  .btn-primary {
+  .btn--primary {
     width: 100%;
   }
 
-  .actions {
+  .form__tools {
     justify-content: center;
   }
 
