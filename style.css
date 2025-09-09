@@ -19,17 +19,14 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 html,
 body {
   height: 100%;
 }
-
 img {
   max-width: 100%;
   display: block;
 }
-
 button,
 input,
 select {
@@ -66,12 +63,10 @@ body {
   text-align: center;
   padding: 3rem 1rem 2rem;
 }
-
 .hero__logo {
   width: 84px;
   margin: 0 auto 0.75rem;
 }
-
 .hero__title {
   font-size: 2.2rem;
   font-weight: 700;
@@ -80,7 +75,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .hero__subtitle {
   font-size: 1rem;
   opacity: 0.95;
@@ -105,12 +99,10 @@ body {
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
-
 .panel--compact {
   max-width: 860px;
   margin: 0 auto 1.5rem;
 }
-
 .panel--message {
   max-width: 860px;
   margin: 0 auto 1.5rem;
@@ -119,7 +111,6 @@ body {
   background: #ebf8ff;
   border: 1px solid var(--intel-teal);
 }
-
 .panel__title {
   font-size: 1.1rem;
   font-weight: 600;
@@ -137,12 +128,10 @@ body {
   align-items: center;
   margin-bottom: 0.75rem;
 }
-
 .totals__label {
   font-weight: 600;
   color: var(--accent);
 }
-
 .totals__goal input {
   width: 72px;
   padding: 0.35rem 0.5rem;
@@ -160,7 +149,6 @@ body {
   width: 100%;
   overflow: hidden;
 }
-
 .progress__bar {
   background: var(--intel-teal);
   height: 100%;
@@ -178,11 +166,9 @@ body {
   background: #ebf8ff;
   border: 1px solid var(--intel-teal);
 }
-
 .greet-pulse {
   animation: greetPulse 0.45s ease-out;
 }
-
 @keyframes greetPulse {
   0% {
     transform: scale(1);
@@ -205,7 +191,6 @@ body {
   gap: 0.6rem;
   align-items: center;
 }
-
 .input,
 .select {
   padding: 0.62rem 0.75rem;
@@ -215,18 +200,15 @@ body {
   color: var(--text);
   min-width: 0;
 }
-
 .input::placeholder {
   color: var(--muted);
 }
-
 .select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   background: #fff;
 }
-
 .input:focus,
 .select:focus {
   outline: 2px solid var(--intel-teal);
@@ -263,35 +245,28 @@ body {
   cursor: pointer;
   transition: filter 0.15s ease, transform 0.02s ease;
 }
-
 .btn:focus-visible {
   outline: 2px solid var(--intel-teal);
   outline-offset: 2px;
 }
-
 .btn:active {
   transform: translateY(1px);
 }
-
 .btn-primary {
   background: var(--intel-blue);
   color: #fff;
 }
-
 .btn-primary:hover {
   filter: brightness(0.95);
 }
-
 .btn-primary:disabled {
   filter: grayscale(0.35) opacity(0.7);
   cursor: not-allowed;
 }
-
 .btn-light {
   background: #f5faff;
   color: var(--text);
 }
-
 .btn-danger {
   background: var(--danger);
   color: #fff;
@@ -303,7 +278,6 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
 }
-
 .team {
   background: #f9fafb;
   border: 1px solid var(--border);
@@ -312,24 +286,20 @@ body {
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-
 .team__icon {
   font-size: 1.5rem;
   margin-bottom: 0.35rem;
 }
-
 .team__name {
   font-size: 1rem;
   margin-bottom: 0.25rem;
   font-weight: 600;
 }
-
 .team__count {
   font-size: 1.6rem;
   font-weight: 800;
   color: var(--accent);
 }
-
 .team--winner {
   border-color: var(--success);
   box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
@@ -338,28 +308,41 @@ body {
 /* Table */
 .table-wrap {
   overflow-x: auto;
+  border-radius: 12px;
 }
-
 .table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
 }
-
 .table th,
 .table td {
   padding: 0.75rem 0.9rem;
   border-bottom: 1px solid var(--border);
   text-align: left;
 }
-
 .table th {
   background: var(--intel-blue);
   color: #fff;
   font-weight: 700;
 }
-
 .table tr:nth-child(even) {
   background: #f9fafb;
+}
+/* round top corners of header row */
+.table thead tr:first-child th:first-child {
+  border-top-left-radius: 12px;
+}
+.table thead tr:first-child th:last-child {
+  border-top-right-radius: 12px;
+}
+/* round bottom corners on last row */
+.table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+.table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
 }
 
 /* Celebration */
@@ -372,11 +355,9 @@ body {
   justify-content: center;
   z-index: 1000;
 }
-
 .celebrate--show {
   display: flex;
 }
-
 .celebrate__card {
   background: #fff;
   border-radius: 14px;
@@ -385,13 +366,11 @@ body {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
   max-width: 500px;
 }
-
 .celebrate__card h2 {
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
   white-space: nowrap;
 }
-
 .celebrate__msg {
   color: var(--text);
 }
@@ -411,11 +390,9 @@ body {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-
   .btn-primary {
     width: 100%;
   }
-
   .teams {
     grid-template-columns: 1fr;
   }
