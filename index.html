@@ -6,7 +6,7 @@
   <title>Intel – Team Sustainability Summit Check-In</title>
   <link rel="icon" href="img/intel-logo.png" />
   <meta name="theme-color" content="#2563eb" />
-  <meta name="description" content="Check-in system for Intel's Team Sustainability Summit: greeting, team tracking, progress bar, celebration, persistence, and attendee list." />
+  <meta name="description" content="Check-in system for Intel's Team Sustainability Summit: greeting, team tracking, progress, celebration, persistence, and attendee list." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -37,6 +37,7 @@
       <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress toward attendance goal">
         <div id="progressBar" class="progress__bar" style="width:0%;">0%</div>
       </div>
+      <span id="srTotals" class="sr-only" aria-live="polite"></span>
     </section>
 
     <!-- Greeting -->
@@ -61,7 +62,7 @@
             <option>Renewables</option>
           </select>
 
-          <button type="submit" class="btn btn-primary">
+          <button id="submitBtn" type="submit" class="btn btn-primary" disabled>
             <span aria-hidden="true">✅</span> Check In
           </button>
         </div>
@@ -126,10 +127,12 @@
     const goalInputEl   = document.getElementById('goalInput');
     const progressBarEl = document.getElementById('progressBar');
     const greetingEl    = document.getElementById('greeting');
+    const srTotalsEl    = document.getElementById('srTotals');
 
     const formEl        = document.getElementById('checkInForm');
     const nameEl        = document.getElementById('nameInput');
     const teamEl        = document.getElementById('teamSelect');
+    const submitBtn     = document.getElementById('submitBtn');
 
     const teamCardsEl   = document.getElementById('teamCards');
     const attendeeBody  = document.getElementById('attendeeBody');
@@ -144,6 +147,7 @@
     goalValueEl.textContent = state.goal;
     renderAll();
     maybeCelebrate();
+    toggleSubmit();
 
     // Events
     formEl.addEventListener('submit', (e) => {
@@ -153,6 +157,10 @@
 
       if (!name || !team) {
         setGreeting('Please enter a name and select a team.');
+        return;
+      }
+      if (isImmediateDuplicate(name, team)) {
+        setGreeting('Looks like a duplicate—try another attendee.');
         return;
       }
 
@@ -166,8 +174,12 @@
       maybeCelebrate();
 
       formEl.reset();
+      toggleSubmit();
       nameEl.focus();
     });
+
+    nameEl.addEventListener('input', toggleSubmit);
+    teamEl.addEventListener('change', toggleSubmit);
 
     goalInputEl.addEventListener('change', () => {
       const v = parseInt(goalInputEl.value, 10);
@@ -189,17 +201,22 @@
     }
 
     function renderTotals() {
-      totalCountEl.textContent = state.attendees.length;
+      const total = state.attendees.length;
+      totalCountEl.textContent = total;
+      srTotalsEl.textContent = `Attendance updated: ${total} of ${state.goal}.`;
     }
 
     function renderTeams() {
       const leader = winnerTeam();
-      teamCardsEl.innerHTML = state.teams.map(t => {
-        const count = state.teamCounts[t] || 0;
+      const items = state.teams
+        .map(t => ({ t, count: state.teamCounts[t] || 0 }))
+        .sort((a, b) => b.count - a.count);
+
+      teamCardsEl.innerHTML = items.map(({ t, count }) => {
         const winClass = leader && leader.name === t ? ' team--winner' : '';
         const icon = t === 'WaterWise' ? '🚿' : (t === 'Net Zero' ? '🌿' : '⚡️');
         return `
-          <article class="team${winClass}" aria-label="${t} team count">
+          <article class="team${winClass}" data-team="${t}" aria-label="${t} team count">
             <div class="team__icon" aria-hidden="true">${icon}</div>
             <div class="team__name">${t}</div>
             <div class="team__count">${count}</div>
@@ -255,7 +272,7 @@
       document.querySelectorAll('.confetti').forEach(n => n.remove());
     }
 
-    // Tiny confetti
+    // Confetti
     function confettiBurst() {
       const colors = ['#00bcd4','#0071c5','#8fe6ff','#28c76f','#ffd166'];
       for (let i = 0; i < 80; i++) {
@@ -286,7 +303,18 @@
       }
     }
 
-    // Utils
+    // Helpers
+    function isImmediateDuplicate(name, team) {
+      const last = state.attendees[state.attendees.length - 1];
+      return last &&
+             last.team === team &&
+             last.name.trim().toLowerCase() === name.trim().toLowerCase();
+    }
+
+    function toggleSubmit() {
+      submitBtn.disabled = !(nameEl.value.trim() && teamEl.value);
+    }
+
     function setGreeting(text, pulse = false) {
       greetingEl.textContent = text;
       if (pulse) {
@@ -294,9 +322,19 @@
         setTimeout(() => greetingEl.classList.remove('greet-pulse'), 450);
       }
     }
-    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-    function loadState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; } }
-    function sanitize(s) { return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); }
+      catch { return null; }
+    }
+
+    function sanitize(s) {
+      return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
   </script>
 </body>
 </html>
