@@ -19,50 +19,86 @@
 
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(180deg, var(--ink-900) 0%, var(--ink-800) 100%);
+  background: linear-gradient(180deg, var(--ink-900), var(--ink-800));
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* ---------------------- HERO ---------------------- */
 .hero {
-  background: linear-gradient(135deg, var(--intel-blue) 0%, var(--intel-teal) 100%);
+  background: linear-gradient(135deg, var(--intel-blue), var(--intel-teal));
   color: #fff;
   text-align: center;
   padding: 3rem 1rem 2rem;
 }
 
 .hero .logo {
-  width: 80px;
-  margin-bottom: 1rem;
+  width: 84px;
+  margin-bottom: 0.75rem;
 }
 
 .hero h1 {
   font-size: 2.2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hero p {
   font-size: 1rem;
-  opacity: 0.9;
+  opacity: 0.95;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Attendance counter + progress bar */
+/* ---------------------- CONTAINER ---------------------- */
+.container {
+  max-width: 980px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+
+/* ---------------------- ATTENDANCE ---------------------- */
 .attendance {
-  text-align: center;
-  margin: 1rem auto;
-  font-weight: 600;
+  display: grid;
+  gap: 0.6rem;
+  justify-items: center;
+  margin: 0 auto 1rem;
+}
+
+.attendance .row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
   color: var(--accent);
+  font-weight: 600;
+}
+
+.goal-wrap {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.goal-input {
+  width: 72px;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #2aa8d6;
+  border-radius: 6px;
+  background: #0b1a2b;
+  color: #fff;
 }
 
 .progress-wrap {
   background: #233447;
   border-radius: 8px;
   height: 12px;
-  width: 90%;
-  margin: 0.5rem auto 2rem;
+  width: min(860px, 92%);
   overflow: hidden;
 }
 
@@ -70,132 +106,140 @@ body {
   background: var(--intel-teal);
   height: 100%;
   width: 0%;
-  transition: width 0.4s ease;
+  transition: width 0.35s ease;
 }
 
-/* Check-in form */
+/* ---------------------- GREETING ---------------------- */
+.welcome,
+.greeting {
+  max-width: 860px;
+  margin: 0.75rem auto 1.25rem;
+  background: rgba(0, 188, 212, 0.1);
+  border: 1px solid var(--intel-teal);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  color: #e9faff;
+}
+
+/* ---------------------- CHECK-IN ---------------------- */
 .checkin-card {
-  max-width: 600px;
+  max-width: 860px;
   margin: 0 auto 2rem;
   background: var(--panel);
+  border: 1px solid rgba(0, 188, 212, 0.3);
   border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  padding: 1.25rem 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .checkin-card h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
   text-align: center;
+  margin-bottom: 0.9rem;
+  white-space: nowrap;
 }
 
 .checkin-form {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
 }
 
 .checkin-form input,
 .checkin-form select {
-  flex: 1 1 40%;
-  padding: 0.6rem;
+  padding: 0.62rem 0.75rem;
   border: 1px solid #2aa8d6;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #0b1a2b;
   color: #fff;
+  min-width: 0;
 }
 
 .checkin-form input::placeholder {
   color: var(--muted);
 }
 
-.checkin-form button {
-  flex: 1 1 100%;
-  padding: 0.7rem;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--intel-teal);
+  outline-offset: 2px;
+}
+
+.btn-primary {
   background: var(--intel-blue);
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
 }
 
-.checkin-form button:hover {
-  background: #005b9e;
+.btn-primary:hover {
+  filter: brightness(0.95);
 }
 
-/* Greeting */
-.greeting {
-  text-align: center;
-  background: rgba(0, 188, 212, 0.1);
-  border: 1px solid var(--intel-teal);
-  border-radius: 8px;
-  padding: 0.75rem;
-  margin: 1rem auto;
-  max-width: 600px;
-  font-weight: 500;
+.btn-ghost {
+  background: transparent;
+  color: #eaf6ff;
+  border: 1px solid rgba(234, 246, 255, 0.25);
 }
 
-/* Team attendance display */
-.teams {
+.actions {
   display: flex;
-  justify-content: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+/* ---------------------- TEAM ATTENDANCE ---------------------- */
+.teams {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin: 2rem auto;
-  max-width: 800px;
+  max-width: 860px;
+  margin: 0 auto 2rem;
 }
 
 .team {
-  flex: 1;
   background: var(--panel);
-  border-radius: 10px;
+  border: 1px solid rgba(0, 188, 212, 0.3);
+  border-radius: 12px;
   padding: 1rem;
   text-align: center;
-  border: 2px solid rgba(0, 188, 212, 0.35);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
 .team h3 {
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
 }
 
-.team span {
-  font-size: 1.5rem;
-  font-weight: 700;
+.team .count {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
 }
 
-/* Celebration overlay */
-.celebration {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-  z-index: 1000;
-  display: none;
-}
-
-.celebration.active {
-  display: flex;
-}
-
-/* Attendee list */
+/* ---------------------- ATTENDEE LIST ---------------------- */
 .attendee-list {
-  max-width: 800px;
-  margin: 2rem auto;
+  max-width: 860px;
+  margin: 0 auto 2rem;
   background: var(--panel);
+  border: 1px solid rgba(0, 188, 212, 0.3);
   border-radius: 12px;
   overflow: hidden;
-  border: 2px solid rgba(0,188,212,0.35);
 }
 
 .attendee-list table {
@@ -205,16 +249,87 @@ body {
 
 .attendee-list th,
 .attendee-list td {
-  padding: 0.75rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   text-align: left;
 }
 
 .attendee-list th {
   background: var(--intel-blue);
   color: #fff;
+  font-weight: 700;
 }
 
 .attendee-list tr:nth-child(even) {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ---------------------- CELEBRATION ---------------------- */
+.celebration {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.celebration.active {
+  display: flex;
+}
+
+.celebration .box {
+  background: #0f2540;
+  border: 1px solid rgba(0, 188, 212, 0.35);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  max-width: 560px;
+}
+
+.celebration h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+}
+
+.celebration p {
+  color: #cfeaff;
+}
+
+/* ---------------------- FOOTER ---------------------- */
+footer {
+  padding: 1.25rem 1rem;
+  text-align: center;
+  color: #dfe9f6;
+  border-top: 1px solid rgba(0, 188, 212, 0.25);
+}
+
+/* ---------------------- MEDIA ---------------------- */
+@media (max-width: 900px) {
+  .checkin-form {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+
+  .teams {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
